@@ -10,6 +10,7 @@ The following list contains all subdirectories and associated exercises that hav
 - [Data Types](./data-types/README.md)
 - [Slicing](./slicing/README.md)
 - [Concatenate](./concatenate/README.md)
+- [String Methods](./string-methods/README.md)
 
 ## Tools
 
