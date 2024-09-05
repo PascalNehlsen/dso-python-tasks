@@ -6,11 +6,13 @@ This README contains an overview about the different tasks in Module 3 for Pytho
 
 The following list contains all subdirectories and associated exercises that have been performed.
 
-- [Variables](./variables/README.md)
-- [Data Types](./data-types/README.md)
-- [Slicing](./slicing/README.md)
-- [Concatenate](./concatenate/README.md)
-- [String Methods](./string-methods/README.md)
+- [Variables](./exercises/variables/README.md)
+- [Data Types](./exercises/data-types/README.md)
+- [Slicing](./exercises/slicing/README.md)
+- [Concatenate](./exercises/concatenate/README.md)
+- [String Methods](./exercises/string-methods/README.md)
+- [Arithmethic Operators](./exercises/arithmethic-operators/README.md)
+- [Logical Operators](./exercises/logical-operators/README.md)
 
 ## Tools
 
