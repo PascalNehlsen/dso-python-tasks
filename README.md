@@ -12,7 +12,7 @@ This repository contains the code for all python tasks of the DevSecOps course.
 
 ## Module 3
 
-The Code for Module 3 can be found in the corresponding [folder](./module-3/README.md), see the [README](./module-3/README.md)
+The Code for Module 3 can be found in the corresponding [folder](./module-3/), see the [README](./module-3/README.md)
 
 ## Module 4
 
