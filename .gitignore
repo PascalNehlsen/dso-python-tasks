@@ -9,3 +9,8 @@ __pycache__
 
 # environment variables
 *.env*
+
+# password list 
+./module-5/hydra/*.txt
+./module-5/hydra/*.log
+
