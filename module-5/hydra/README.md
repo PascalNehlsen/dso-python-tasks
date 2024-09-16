@@ -25,7 +25,6 @@ This implementation covers the following features/options:
 - **Dictionary Attack**: Uses a provided wordlist to attempt to find the correct password.
 - **Configurable Parameters**: Allows customization of minimum and maximum password lengths, as well as character sets.
 - **Logging**: Provides detailed logs of all connection attempts and outcomes.
-- **Concurrent Processing**: Uses threads for efficient password testing.
 
 ## Getting Started
 
@@ -41,9 +40,11 @@ cd hydra
 
 2. **Install Dependencies**:
    Ensure you have **paramiko** installed. You can install it using pip:
-   ```bash
-   pip install paramiko
-   ```
+
+```shell
+bash
+pip install paramiko
+```
 
 ## Usage Examples
 
@@ -71,10 +72,10 @@ python hydra.py \
     -w <path_to_wordlist>
 ```
 
-- <username>: The SSH username.
-- <server>: The IP address or DNS name of the SSH server.
-- <port>: The port for SSH connection (default is 22 if not specified).
-- <path_to_wordlist>: Path to the wordlist file.
+- username: The SSH username.
+- server: The IP address or DNS name of the SSH server.
+- port: The port for SSH connection (default is 22 if not specified).
+- path_to_wordlist: Path to the wordlist file.
 
 Example:
 
@@ -100,12 +101,12 @@ python hydra.py \
     -c <charset>
 ```
 
-- <username>: The SSH username.
-- <server>: The IP address or DNS name of the SSH server.
-- <port>: The port for SSH connection (default is 22 if not specified).
-- <min_length>: Minimum length of the password.
-- <max_length>: Maximum length of the password.
-- <charset>: Characters to use in the password generation (default is alphanumeric).
+- username: The SSH username.
+- server: The IP address or DNS name of the SSH server.
+- port: The port for SSH connection (default is 22 if not specified).
+- min_length: Minimum length of the password.
+- max_length: Maximum length of the password.
+- charset: Characters to use in the password generation (default is alphanumeric).
 
 Example:
 
