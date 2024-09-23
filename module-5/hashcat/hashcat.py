@@ -2,12 +2,14 @@ import argparse
 import hashlib
 from itertools import product
 import logging
+import concurrent.futures
 from typing import Callable, Generator, Optional
+import string
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.scrypt]]:
+def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.Hash]]:
     """
     Retrieve the appropriate hash function based on the given mode.
 
@@ -23,9 +25,9 @@ def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.scrypt]]:
         2: hashlib.sha256,
         3: hashlib.sha512
     }
-    return hash_funcs.get(mode, None)
+    return hash_funcs.get(mode)
 
-def hash_password(password: str, hash_func: Callable[[], hashlib.scrypt]) -> str:
+def hash_password(password: str, hash_func: Callable[[], hashlib.Hash]) -> str:
     """
     Hash a password using the specified hash function.
 
@@ -40,7 +42,39 @@ def hash_password(password: str, hash_func: Callable[[], hashlib.scrypt]) -> str
     hasher.update(password.encode())
     return hasher.hexdigest()
 
-def brute_force_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, charset: str, max_length: int) -> Optional[str]:
+def generate_passwords(charset: str, max_length: int) -> Generator[str, None, None]:
+    """
+    Generate passwords of lengths from 1 to max_length using the charset.
+
+    Args:
+        charset (str): The set of characters to use for generating passwords.
+        max_length (int): The maximum length of passwords to generate.
+
+    Yields:
+        Generator[str, None, None]: A generator yielding passwords.
+    """
+    for length in range(1, max_length + 1):
+        for candidate in product(charset, repeat=length):
+            yield ''.join(candidate)
+
+def attempt_password(password: str, hash_func: Callable[[], hashlib.Hash], target_hash: str) -> Optional[str]:
+    """
+    Attempt to hash the password and check against the target hash.
+
+    Args:
+        password (str): The password to attempt.
+        hash_func (Callable[[], hashlib.Hash]): The hash function to use.
+        target_hash (str): The target hash to compare against.
+
+    Returns:
+        Optional[str]: The password if it matches the target hash, otherwise None.
+    """
+    hashed = hash_password(password, hash_func)
+    if hashed == target_hash:
+        return password
+    return None
+
+def brute_force_attack(hash_func: Callable[[], hashlib.Hash], target_hash: str, charset: str, max_length: int) -> Optional[str]:
     """
     Perform a brute-force attack to find the password that matches the target hash.
 
@@ -53,21 +87,18 @@ def brute_force_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str
     Returns:
         Optional[str]: The found password if one matches the target hash, otherwise None.
     """
-    def generate_passwords() -> Generator[str, None, None]:
-        """Generate passwords of lengths from 1 to max_length using the charset."""
-        for length in range(1, max_length + 1):
-            for candidate in product(charset, repeat=length):
-                yield ''.join(candidate)
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = {executor.submit(attempt_password, password, hash_func, target_hash): password 
+                   for password in generate_passwords(charset, max_length)}
 
-    for password in generate_passwords():
-        hashed = hash_password(password, hash_func)
-        logging.debug(f"Testing password: {password}, Hash: {hashed}")
-        if hashed == target_hash:
-            return password
+        for future in concurrent.futures.as_completed(futures):
+            result = future.result()
+            if result:
+                return result
 
     return None
 
-def dictionary_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, dictionary_file: str) -> Optional[str]:
+def dictionary_attack(hash_func: Callable[[], hashlib.Hash], target_hash: str, dictionary_file: str) -> Optional[str]:
     """
     Perform a dictionary attack to find the password that matches the target hash.
 
@@ -103,20 +134,20 @@ def main() -> None:
     parser.add_argument("--hash-file", type=str, help="File containing target hash (use with --hash)")
     parser.add_argument("--dictionary", type=str, help="Dictionary file for dictionary attack")
     parser.add_argument("--max-length", type=int, default=4, help="Maximum length for brute-force attack")
-    parser.add_argument("--charset", type=str, default='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', help="Charset for brute-force attack")
+    parser.add_argument("--charset", type=str, default=string.ascii_letters + string.digits, help="Charset for brute-force attack")
 
     args = parser.parse_args()
 
-    if args.hash:
-        target_hash = args.hash
-    elif args.hash_file:
+    target_hash = args.hash if args.hash else None
+    if args.hash_file:
         try:
             with open(args.hash_file, 'r') as file:
                 target_hash = file.read().strip()
         except FileNotFoundError:
             logging.error(f"Hash file '{args.hash_file}' not found.")
             return
-    else:
+
+    if not target_hash:
         parser.error("No hash provided. Use --hash or --hash-file.")
 
     hash_func = get_hash_function(args.mode)
