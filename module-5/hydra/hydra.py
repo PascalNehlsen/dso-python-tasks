@@ -13,6 +13,10 @@ logger.setLevel(logging.INFO)
 file_handler = logging.FileHandler('hydra.log')
 file_handler.setLevel(logging.INFO)  # Set the level for the file handler
 
+# Set Paramiko's logger level to ERROR to suppress INFO messages
+paramiko_logger = logging.getLogger("paramiko")
+paramiko_logger.setLevel(logging.ERROR)
+
 # Create a console handler to output logs to the console
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)  # Set the level for the console handler
@@ -54,9 +58,10 @@ def try_login(username: str, server: str, password: str, port: int = 22) -> bool
         client.connect(server, username=username, password=password, port=port, timeout=10, allow_agent=False, look_for_keys=False)
         return True
     except paramiko.AuthenticationException:
+        logger.info(f"Password '{password}' failed for username '{username}' on server '{server}'")
         return False
     except Exception as e:
-        logger.error(f"Error: {e}")
+        logger.error(f"Error trying password '{password}': {e}")
         return False
     finally:
         client.close()
