@@ -9,7 +9,7 @@ import string
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.Hash]]:
+def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.scrypt]]:
     """
     Retrieve the appropriate hash function based on the given mode.
 
@@ -27,7 +27,7 @@ def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.Hash]]:
     }
     return hash_funcs.get(mode)
 
-def hash_password(password: str, hash_func: Callable[[], hashlib.Hash]) -> str:
+def hash_password(password: str, hash_func: Callable[[], hashlib.scrypt]) -> str:
     """
     Hash a password using the specified hash function.
 
@@ -57,7 +57,7 @@ def generate_passwords(charset: str, max_length: int) -> Generator[str, None, No
         for candidate in product(charset, repeat=length):
             yield ''.join(candidate)
 
-def attempt_password(password: str, hash_func: Callable[[], hashlib.Hash], target_hash: str) -> Optional[str]:
+def attempt_password(password: str, hash_func: Callable[[], hashlib.scrypt], target_hash: str) -> Optional[str]:
     """
     Attempt to hash the password and check against the target hash.
 
@@ -74,7 +74,7 @@ def attempt_password(password: str, hash_func: Callable[[], hashlib.Hash], targe
         return password
     return None
 
-def brute_force_attack(hash_func: Callable[[], hashlib.Hash], target_hash: str, charset: str, max_length: int) -> Optional[str]:
+def brute_force_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, charset: str, max_length: int) -> Optional[str]:
     """
     Perform a brute-force attack to find the password that matches the target hash.
 
@@ -98,7 +98,7 @@ def brute_force_attack(hash_func: Callable[[], hashlib.Hash], target_hash: str, 
 
     return None
 
-def dictionary_attack(hash_func: Callable[[], hashlib.Hash], target_hash: str, dictionary_file: str) -> Optional[str]:
+def dictionary_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, dictionary_file: str) -> Optional[str]:
     """
     Perform a dictionary attack to find the password that matches the target hash.
 
