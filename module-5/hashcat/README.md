@@ -11,9 +11,9 @@ This repository contains the source code for my own implementation of the **hash
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Usage Examples](#usage-examples)
-  - [Options](#options)
-  - [Dictionary Attack](#dictionary-attack)
   - [Brute-Force Attack](#brute-force-attack)
+  - [Dictionary Attack](#dictionary-attack)
+  - [Hashcat-Options](#options)
 - [Logging](#logging)
 - [Contact](#contact)
 
@@ -43,17 +43,29 @@ cd hashcat
 
 ## Usage Examples
 
-### Options
+### Brute-Force Attack
 
-| Option         | Shorthand | Description                                     | Default value | Required |
-| -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
-| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             | x        |
-| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             | x        |
-| `--hash`       | -         | Target hash (use with `--hash-file`)            | -             |          |
-| `--hash-file`  | -         | File containing target hash (use with `--hash`) | -             |          |
-| `--dictionary` | -         | Dictionary file for dictionary attack           | -             |          |
-| `--max-length` | -         | Maximum length for brute-force attack           | 4             |          |
-| `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
+To perform a brute-force attack without a wordlist, use the following command:
+
+```shell
+python hashcat.py \
+    -m <mode> \
+    -a <attack> \
+    --hash <target_hash> \
+    --max-length <max_length> \
+    --charset <charset>
+```
+
+Example:
+
+```shell
+python hashcat.py \
+    -m 2 \
+    -a 0 \
+    --hash 826ecad4ae11c8196ab3432ccbb22400691c248131b97fa4fe6f02dcf20f6049 \
+    --max-length 7 \
+    --charset 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+```
 
 ### Dictionary Attack
 
@@ -79,29 +91,17 @@ python hashcat.py \
     -dictionary ./small-password-list.txt
 ```
 
-### Brute-Force Attack
+### Options
 
-To perform a brute-force attack without a wordlist, use the following command:
-
-```shell
-python hashcat.py \
-    -m <mode> \
-    -a <attack> \
-    --hash <target_hash> \
-    --max-length <max_length> \
-    --charset <charset>
-```
-
-Example:
-
-```shell
-python hashcat.py \
-    -m 2 \
-    -a 0 \
-    --hash 826ecad4ae11c8196ab3432ccbb22400691c248131b97fa4fe6f02dcf20f6049 \
-    --max-length 7 \
-    --charset 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-```
+| Option         | Shorthand | Description                                     | Default value | Required |
+| -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
+| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             | x        |
+| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             | x        |
+| `--hash`       | -         | Target hash (use with `--hash-file`)            | -             |          |
+| `--hash-file`  | -         | File containing target hash (use with `--hash`) | -             |          |
+| `--dictionary` | -         | Dictionary file for dictionary attack           | -             |          |
+| `--max-length` | -         | Maximum length for brute-force attack           | 4             |          |
+| `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
 
 ## Logging
 
