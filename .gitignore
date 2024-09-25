@@ -9,3 +9,6 @@ __pycache__
 
 # environment variables
 *.env*
+
+# exploit
+module-5/2023-32784-exploit/dumps
