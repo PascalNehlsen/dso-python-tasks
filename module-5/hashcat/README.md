@@ -23,8 +23,12 @@ This implementation covers the following features/options:
 
 - **Brute-Force Attack**: Attempts to crack passwords by trying all combinations within a given length and character set.
 - **Dictionary Attack**: Uses a provided wordlist to attempt to find the correct password.
-- **Configurable Parameters**: Allows customization of password length, character set, and hash modes (MD5, SHA-1, SHA-256, SHA-512).
-- **Logging**: Provides detailed logs of all connection attempts and outcomes.
+- **Configurability**: Allows customization of password length, character set, and hash modes (MD5, SHA-1, SHA-256, SHA-512).
+- **Logging**: Provides unstructured detailed logs of all connection attempts and outcomes.
+
+**Technologies**:
+
+- Python 3
 
 ## Getting Started
 
@@ -33,30 +37,23 @@ To get started with the `hashcat` tool, follow these steps:
 1. **Clone the Repository**:
 
 ```shell
-git clone https://github.com/yourusername/hashcat.git
-cd hydra
-```
-
-2. **Install Dependencies**:
-   Ensure you have **Python 3** installed. The required Python packages can be installed using pip:
-
-```shell
-pip install hashlib
+git clone https://github.com/pascalnehlsen/hashcat.git
+cd hashcat
 ```
 
 ## Usage Examples
 
 ### Options
 
-| Option               | Description                                     | Required |
-| -------------------- | ----------------------------------------------- | -------- |
-| `-m` <br> `--mode`   | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | x        |
-| `-a` <br> `--attack` | Attack mode: 0=Brute-Force, 1=Dictionary        | x        |
-| `--hash`             | Target hash (use with `--hash-file`)            | x        |
-| `--hash-file`        | File containing target hash (use with `--hash`) | x        |
-| `--dictionary`       | Dictionary file for dictionary attack           |          |
-| `--max-length`       | Maximum length for brute-force attack           |          |
-| `--charset`          | Charset for brute-force attack                  |          |
+| Option         | Shorthand | Description                                     | Default value | Required |
+| -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
+| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             | x        |
+| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             | x        |
+| `--hash`       | -         | Target hash (use with `--hash-file`)            | -             |          |
+| `--hash-file`  | -         | File containing target hash (use with `--hash`) | -             |          |
+| `--dictionary` | -         | Dictionary file for dictionary attack           | -             |          |
+| `--max-length` | -         | Maximum length for brute-force attack           | 4             |          |
+| `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
 
 ### Dictionary Attack
 
@@ -70,9 +67,7 @@ python hashcat.py \
     -dictionary <path_to_dictionary>
 ```
 
-- mode: The hash mode (0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512).
-- target_hash: The hash you are attempting to crack.
-- path_to_dictionary: Path to the wordlist file.
+- path_to_wordlist (`-dictionary`): Path to the dictionary file (required for dictionary attack)
 
 Example:
 
@@ -81,7 +76,7 @@ python hashcat.py \
     -m 0 \
     -a 1 \
     --hash 5f4dcc3b5aa765d61d8327deb882cf99 \
-    -dictionary ./passwords.txt
+    -dictionary ./small-password-list.txt
 ```
 
 ### Brute-Force Attack
@@ -96,11 +91,6 @@ python hashcat.py \
     --max-length <max_length> \
     --charset <charset>
 ```
-
-- mode: The hash mode (0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512).
-- target_hash: The hash you are attempting to crack.
-- max_length: Maximum length of the password.
-- charset: Characters to use in the password generation.
 
 Example:
 

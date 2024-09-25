@@ -27,7 +27,11 @@ def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.scrypt]]:
     }
     return hash_funcs.get(mode)
 
-def hash_password(password: str, hash_func: Callable[[], hashlib.scrypt]) -> str:
+def hash_password(
+        password: str, 
+        hash_func: Callable[[], 
+        hashlib.scrypt]
+) -> str:
     """
     Hash a password using the specified hash function.
 
@@ -42,7 +46,10 @@ def hash_password(password: str, hash_func: Callable[[], hashlib.scrypt]) -> str
     hasher.update(password.encode())
     return hasher.hexdigest()
 
-def generate_passwords(charset: str, max_length: int) -> Generator[str, None, None]:
+def generate_passwords(
+        charset: str, 
+        max_length: int
+) -> Generator[str, None, None]:
     """
     Generate passwords of lengths from 1 to max_length using the charset.
 
@@ -57,7 +64,12 @@ def generate_passwords(charset: str, max_length: int) -> Generator[str, None, No
         for candidate in product(charset, repeat=length):
             yield ''.join(candidate)
 
-def attempt_password(password: str, hash_func: Callable[[], hashlib.scrypt], target_hash: str) -> Optional[str]:
+def attempt_password(
+        password: str, 
+        hash_func: Callable[[], 
+        hashlib.scrypt], 
+        target_hash: str
+) -> Optional[str]:
     """
     Attempt to hash the password and check against the target hash.
 
@@ -74,7 +86,13 @@ def attempt_password(password: str, hash_func: Callable[[], hashlib.scrypt], tar
         return password
     return None
 
-def brute_force_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, charset: str, max_length: int) -> Optional[str]:
+def brute_force_attack(
+        hash_func: Callable[[], 
+        hashlib.scrypt], 
+        target_hash: str, 
+        charset: str,
+        max_length: int
+) -> Optional[str]:
     """
     Perform a brute-force attack to find the password that matches the target hash.
 
@@ -98,7 +116,12 @@ def brute_force_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str
 
     return None
 
-def dictionary_attack(hash_func: Callable[[], hashlib.scrypt], target_hash: str, dictionary_file: str) -> Optional[str]:
+def dictionary_attack(
+    hash_func: Callable[[], 
+    hashlib.scrypt], 
+    target_hash: str, 
+    dictionary_file: str
+) -> Optional[str]:
     """
     Perform a dictionary attack to find the password that matches the target hash.
 
@@ -128,13 +151,13 @@ def main() -> None:
     Main function to parse arguments and start the hash cracking process.
     """
     parser = argparse.ArgumentParser(description="Simple hash cracker.")
-    parser.add_argument("-m", "--mode", type=int, required=True, choices=[0, 1, 2, 3], help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
-    parser.add_argument("-a", "--attack", type=int, required=True, choices=[0, 1], help="Attack mode: 0=Brute-Force, 1=Dictionary")
+    parser.add_argument("-m", "--mode", type=int, default=2, required=True, choices=[0, 1, 2, 3], help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
+    parser.add_argument("-a", "--attack", type=int, default=0, required=True, choices=[0, 1], help="Attack mode: 0=Brute-Force, 1=Dictionary")
     parser.add_argument("--hash", type=str, help="Target hash (use with --hash-file)")
     parser.add_argument("--hash-file", type=str, help="File containing target hash (use with --hash)")
     parser.add_argument("--dictionary", type=str, help="Dictionary file for dictionary attack")
     parser.add_argument("--max-length", type=int, default=4, help="Maximum length for brute-force attack")
-    parser.add_argument("--charset", type=str, default=string.ascii_letters + string.digits, help="Charset for brute-force attack")
+    parser.add_argument("--charset", "-c", type=str, default=string.ascii_letters + string.digits, help="Charset for brute-force attack")
 
     args = parser.parse_args()
 
