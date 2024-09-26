@@ -64,7 +64,7 @@ python hashcat.py \
     -a 0 \
     --hash 826ecad4ae11c8196ab3432ccbb22400691c248131b97fa4fe6f02dcf20f6049 \
     --max-length 7 \
-    --charset 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    --charset 'abcdefghijklmnopqrstuvwxyz'
 ```
 
 ### Dictionary Attack
@@ -87,7 +87,7 @@ Example:
 python hashcat.py \
     -m 0 \
     -a 1 \
-    --hash 5f4dcc3b5aa765d61d8327deb882cf99 \
+    --hash 826ecad4ae11c8196ab3432ccbb22400691c248131b97fa4fe6f02dcf20f6049 \
     -dictionary ./small-password-list.txt
 ```
 
@@ -95,13 +95,15 @@ python hashcat.py \
 
 | Option         | Shorthand | Description                                     | Default value | Required |
 | -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
-| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             | x        |
-| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             | x        |
-| `--hash`       | -         | Target hash (use with `--hash-file`)            | -             |          |
-| `--hash-file`  | -         | File containing target hash (use with `--hash`) | -             |          |
-| `--dictionary` | -         | Dictionary file for dictionary attack           | -             |          |
-| `--max-length` | -         | Maximum length for brute-force attack           | 4             |          |
+| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             |          |
+| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             |          |
+| `--hash`       | -         | Target hash                                     | -             | x        |
+| `--hash-file`  | -         | File path containing target hash                | -             | x        |
+| `--dictionary` | `-d`      | Dictionary file path for dictionary attack      | -             |          |
+| `--max-length` | `-ml`     | Maximum length for brute-force attack           | 4             |          |
 | `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
+
+- One of the two is required: `--hash` or `--hash-file`
 
 ## Logging
 

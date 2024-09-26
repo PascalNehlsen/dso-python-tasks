@@ -151,12 +151,12 @@ def main() -> None:
     Main function to parse arguments and start the hash cracking process.
     """
     parser = argparse.ArgumentParser(description="Simple hash cracker.")
-    parser.add_argument("-m", "--mode", type=int, default=2, required=True, choices=[0, 1, 2, 3], help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
-    parser.add_argument("-a", "--attack", type=int, default=0, required=True, choices=[0, 1], help="Attack mode: 0=Brute-Force, 1=Dictionary")
+    parser.add_argument("-m", "--mode", type=int, default=2, choices=[0, 1, 2, 3], help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
+    parser.add_argument("-a", "--attack", type=int, default=0, choices=[0, 1], help="Attack mode: 0=Brute-Force, 1=Dictionary")
     parser.add_argument("--hash", type=str, help="Target hash (use with --hash-file)")
     parser.add_argument("--hash-file", type=str, help="File containing target hash (use with --hash)")
-    parser.add_argument("--dictionary", type=str, help="Dictionary file for dictionary attack")
-    parser.add_argument("--max-length", type=int, default=4, help="Maximum length for brute-force attack")
+    parser.add_argument("--dictionary", "-d", type=str, help="Dictionary file for dictionary attack")
+    parser.add_argument("--max-length", "-ml", type=int, default=4, help="Maximum length for brute-force attack")
     parser.add_argument("--charset", "-c", type=str, default=string.ascii_letters + string.digits, help="Charset for brute-force attack")
 
     args = parser.parse_args()
