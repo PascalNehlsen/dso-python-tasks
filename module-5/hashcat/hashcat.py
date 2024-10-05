@@ -23,15 +23,13 @@ def get_hash_function(mode: int) -> Optional[Callable[[], hashlib.scrypt]]:
         0: hashlib.md5,
         1: hashlib.sha1,
         2: hashlib.sha256,
-        3: hashlib.sha512
-    }
+        3: hashlib.sha512}
     return hash_funcs.get(mode)
 
 def hash_password(
         password: str, 
         hash_func: Callable[[], 
-        hashlib.scrypt]
-) -> str:
+        hashlib.scrypt]) -> str:
     """
     Hash a password using the specified hash function.
 
@@ -48,8 +46,7 @@ def hash_password(
 
 def generate_passwords(
         charset: str, 
-        max_length: int
-) -> Generator[str, None, None]:
+        max_length: int) -> Generator[str, None, None]:
     """
     Generate passwords of lengths from 1 to max_length using the charset.
 
@@ -68,8 +65,7 @@ def attempt_password(
         password: str, 
         hash_func: Callable[[], 
         hashlib.scrypt], 
-        target_hash: str
-) -> Optional[str]:
+        target_hash: str) -> Optional[str]:
     """
     Attempt to hash the password and check against the target hash.
 
@@ -91,8 +87,7 @@ def brute_force_attack(
         hashlib.scrypt], 
         target_hash: str, 
         charset: str,
-        max_length: int
-) -> Optional[str]:
+        max_length: int) -> Optional[str]:
     """
     Perform a brute-force attack to find the password that matches the target hash.
 
@@ -120,8 +115,7 @@ def dictionary_attack(
     hash_func: Callable[[], 
     hashlib.scrypt], 
     target_hash: str, 
-    dictionary_file: str
-) -> Optional[str]:
+    dictionary_file: str) -> Optional[str]:
     """
     Perform a dictionary attack to find the password that matches the target hash.
 
@@ -157,46 +151,39 @@ def main() -> None:
         type=int, 
         default=2, 
         choices=[0, 1, 2, 3], 
-        help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512"
-    )
+        help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
     parser.add_argument(
         "-a", 
         "--attack", 
         type=int, 
         default=0, 
         choices=[0, 1], 
-        help="Attack mode: 0=Brute-Force, 1=Dictionary"
-    )
+        help="Attack mode: 0=Brute-Force, 1=Dictionary")
     parser.add_argument(
         "-h", 
         type=str, 
-        help="Target hash (use with --hash-file)"
-    )
+        help="Target hash (use with --hash-file)")
     parser.add_argument(
         "--hash-file", 
         type=str, 
-        help="File containing target hash (use with --hash)"
-    )
+        help="File containing target hash (use with --hash)")
     parser.add_argument(
         "--dictionary", 
         "-d", 
         type=str, 
-        help="Dictionary file for dictionary attack"
-    )
+        help="Dictionary file for dictionary attack")
     parser.add_argument(
         "--max-length", 
         "-ml", 
         type=int, 
         default=4, 
-        help="Maximum length for brute-force attack"
-    )
+        help="Maximum length for brute-force attack")
     parser.add_argument(
         "--charset", 
         "-c", 
         type=str, 
         default=string.ascii_letters + string.digits, 
-        help="Charset for brute-force attack"
-    )
+        help="Charset for brute-force attack")
 
     args = parser.parse_args()
 
