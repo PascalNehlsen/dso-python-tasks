@@ -29,6 +29,7 @@ This implementation covers the following features/options:
 **Technologies**:
 
 - Python 3
+- Pip
 
 ## Getting Started
 
@@ -43,20 +44,23 @@ cd hashcat
 
 ## Usage Examples
 
+### Options
+
+| Option         | Shorthand | Description                                     | Default value | Required |
+| -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
+| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             |          |
+| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             |          |
+| `--hash`       | -         | Target hash                                     | -             | x        |
+| `--hash-file`  | -         | File path containing target hash                | -             | x        |
+| `--dictionary` | `-d`      | Dictionary file path for dictionary attack      | -             |          |
+| `--max-length` | `-ml`     | Maximum length for brute-force attack           | 4             |          |
+| `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
+
+- One of the two is required: `--hash` or `--hash-file`
+
 ### Brute-Force Attack
 
 To perform a brute-force attack without a wordlist, use the following command:
-
-```shell
-python hashcat.py \
-    -m <mode> \
-    -a <attack> \
-    --hash <target_hash> \
-    --max-length <max_length> \
-    --charset <charset>
-```
-
-Example:
 
 ```shell
 python hashcat.py \
@@ -73,37 +77,11 @@ To perform a dictionary attack using a wordlist, use the following command:
 
 ```shell
 python hashcat.py \
-    -m <mode> \
-    -a <attack> \
-    --hash <target_hash> \
-    -dictionary <path_to_dictionary>
-```
-
-- path_to_wordlist (`-dictionary`): Path to the dictionary file (required for dictionary attack)
-
-Example:
-
-```shell
-python hashcat.py \
     -m 0 \
     -a 1 \
     --hash 826ecad4ae11c8196ab3432ccbb22400691c248131b97fa4fe6f02dcf20f6049 \
     -dictionary ./small-password-list.txt
 ```
-
-### Options
-
-| Option         | Shorthand | Description                                     | Default value | Required |
-| -------------- | --------- | ----------------------------------------------- | ------------- | -------- |
-| `--mode`       | `-m`      | Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512 | 2             |          |
-| `--attack`     | `-a`      | Attack mode: 0=Brute-Force, 1=Dictionary        | 0             |          |
-| `--hash`       | -         | Target hash                                     | -             | x        |
-| `--hash-file`  | -         | File path containing target hash                | -             | x        |
-| `--dictionary` | `-d`      | Dictionary file path for dictionary attack      | -             |          |
-| `--max-length` | `-ml`     | Maximum length for brute-force attack           | 4             |          |
-| `--charset`    | `-c`      | Charset for brute-force attack                  | alphanumeric  |          |
-
-- One of the two is required: `--hash` or `--hash-file`
 
 ## Logging
 

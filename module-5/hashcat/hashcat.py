@@ -151,17 +151,64 @@ def main() -> None:
     Main function to parse arguments and start the hash cracking process.
     """
     parser = argparse.ArgumentParser(description="Simple hash cracker.")
-    parser.add_argument("-m", "--mode", type=int, default=2, choices=[0, 1, 2, 3], help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512")
-    parser.add_argument("-a", "--attack", type=int, default=0, choices=[0, 1], help="Attack mode: 0=Brute-Force, 1=Dictionary")
-    parser.add_argument("--hash", type=str, help="Target hash (use with --hash-file)")
-    parser.add_argument("--hash-file", type=str, help="File containing target hash (use with --hash)")
-    parser.add_argument("--dictionary", "-d", type=str, help="Dictionary file for dictionary attack")
-    parser.add_argument("--max-length", "-ml", type=int, default=4, help="Maximum length for brute-force attack")
-    parser.add_argument("--charset", "-c", type=str, default=string.ascii_letters + string.digits, help="Charset for brute-force attack")
+    parser.add_argument(
+        "-m", 
+        "--mode", 
+        type=int, 
+        default=2, 
+        choices=[0, 1, 2, 3], 
+        help="Hash mode: 0=MD5, 1=SHA-1, 2=SHA-256, 3=SHA-512"
+    )
+    parser.add_argument(
+        "-a", 
+        "--attack", 
+        type=int, 
+        default=0, 
+        choices=[0, 1], 
+        help="Attack mode: 0=Brute-Force, 1=Dictionary"
+    )
+    parser.add_argument(
+        "-h", 
+        type=str, 
+        help="Target hash (use with --hash-file)"
+    )
+    parser.add_argument(
+        "--hash-file", 
+        type=str, 
+        help="File containing target hash (use with --hash)"
+    )
+    parser.add_argument(
+        "--dictionary", 
+        "-d", 
+        type=str, 
+        help="Dictionary file for dictionary attack"
+    )
+    parser.add_argument(
+        "--max-length", 
+        "-ml", 
+        type=int, 
+        default=4, 
+        help="Maximum length for brute-force attack"
+    )
+    parser.add_argument(
+        "--charset", 
+        "-c", 
+        type=str, 
+        default=string.ascii_letters + string.digits, 
+        help="Charset for brute-force attack"
+    )
 
     args = parser.parse_args()
 
     target_hash = args.hash if args.hash else None
+    hash_func = get_hash_function(args.mode)
+
+    if not target_hash:
+        parser.error("No hash provided. Use --hash or --hash-file.")
+    
+    if hash_func is None:
+        parser.error(f"Invalid hash mode '{args.mode}'.")
+
     if args.hash_file:
         try:
             with open(args.hash_file, 'r') as file:
@@ -170,15 +217,19 @@ def main() -> None:
             logging.error(f"Hash file '{args.hash_file}' not found.")
             return
 
-    if not target_hash:
-        parser.error("No hash provided. Use --hash or --hash-file.")
-
-    hash_func = get_hash_function(args.mode)
-    if hash_func is None:
-        parser.error(f"Invalid hash mode '{args.mode}'.")
-
     if args.attack == 0:
         logging.info("Starting brute-force attack...")
+
+        # Validate charset
+        if not args.charset or len(args.charset) == 0:
+            logging.error("Charset must be provided and cannot be empty.")
+            raise ValueError("Charset must be provided and cannot be empty.")
+        
+        # Validate max_length
+        if not isinstance(args.max_length, int) or args.max_length <= 0:
+            logging.error("max_length must be a positive integer.")
+            raise ValueError("max_length must be a positive integer.")
+        
         result = brute_force_attack(hash_func, target_hash, args.charset, args.max_length)
         if result:
             logging.info(f"Password found: {result}")
