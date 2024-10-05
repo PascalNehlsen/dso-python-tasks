@@ -3,7 +3,9 @@ import socket
 import concurrent.futures
 from typing import Tuple, Optional
 
-def scan_port(ip: str, port: int) -> Tuple[int, str, Optional[str]]:
+def scan_port(
+        ip: str, 
+        port: int) -> Tuple[int, str, Optional[str]]:
     """
     Attempts to connect to a given port on the specified IP address and checks if the port is open or closed.
 
@@ -56,7 +58,9 @@ def resolve_target(target: str) -> str:
         print(f"Error: Unable to resolve address {target}.")
         exit(1)
 
-def port_scanner(target: str, port_range: str) -> None:
+def port_scanner(
+        target: str, 
+        port_range: str) -> None:
     """
     Scans the specified range of ports on a target IP or domain.
 
@@ -111,8 +115,15 @@ if __name__ == "__main__":
         None
     """
     parser = argparse.ArgumentParser(description="A simple port scanner similar to nmap")
-    parser.add_argument("target", help="IP address or domain name of the target")
-    parser.add_argument("-p", "--ports", required=True, help="Port range (min-max) or - for all ports")
+    parser.add_argument(
+        "target", 
+        required=True, 
+        help="IP address or domain name of the target")
+    parser.add_argument(
+        "-p",
+        "--ports", 
+        required=True, 
+        help="Port range (min-max) or - for all ports")
     
     args = parser.parse_args()
     

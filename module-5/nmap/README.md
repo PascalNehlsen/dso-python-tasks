@@ -39,10 +39,10 @@ cd nmap
 
 ### Options
 
-| Option | Description                               | Required |
-| ------ | ----------------------------------------- | -------- |
-| `-p`   | Specify port range or `-p-` for all ports | x        |
-| `-s`   | Target IP address or DNS name             | x        |
+| Option    | Shorthand | Description                               | Required |
+| --------- | --------- | ----------------------------------------- | -------- |
+| `--ports` | `-p`      | Specify port range or `-p-` for all ports | x        |
+| `-s`      | -         | Target IP address or DNS name             | x        |
 
 ### Scanning Ports
 
