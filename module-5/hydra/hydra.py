@@ -43,8 +43,7 @@ def try_login(
         username: str, 
         server: str, 
         password: str, 
-        port: int = 22
-) -> bool:
+        port: int = 22) -> bool:
     """
     Attempts to log in to the SSH server using the provided username and password.
 
@@ -67,8 +66,7 @@ def try_login(
             port=port, 
             timeout=10, 
             allow_agent=False, 
-            look_for_keys=False
-    )
+            look_for_keys=False)
         return True
     except paramiko.AuthenticationException:
         logger.info(f"Password '{password}' failed for username '{username}' on server '{server}'")
@@ -82,8 +80,7 @@ def try_login(
 def password_generator(
         min_len: int, 
         max_len: int, 
-        charset: str
-):
+        charset: str):
     """
     Generates all possible passwords within the given length and charset.
 
@@ -103,8 +100,7 @@ def dictionary_attack(
         username, 
         server, 
         password_file, 
-        port
-):
+        port):
     """
     Performs a dictionary attack by testing passwords from the specified file.
     """
@@ -127,8 +123,7 @@ def brute_force_password(
         min_len: int, 
         max_len: int, 
         charset: str, 
-        port: int
-):
+        port: int):
     """
     Performs a brute-force attack to find the password by trying all combinations 
     within the given length and charset.
@@ -165,13 +160,36 @@ def main():
     Handles both dictionary and brute-force attacks based on the presence of a wordlist file.
     """
     parser = argparse.ArgumentParser(description="Hydra-like SSH Brute Force Tool")
-    parser.add_argument('-u', default='root', help="Username for SSH login")
-    parser.add_argument('-s', required=True, help="Server IP address or DNS")
-    parser.add_argument('-p', type=int, default=22, help="Port for SSH connection (default is 22)")
-    parser.add_argument('-w', help="Path to the wordlist for dictionary attack")
-    parser.add_argument('--min', type=int, default=1, help="Minimum password length for brute force attack")
-    parser.add_argument('--max', type=int, default=4, help="Maximum password length for brute force attack")
-    parser.add_argument('-c', default=string.ascii_letters + string.digits, help="Charset for brute force attack")
+    parser.add_argument(
+        '-u', 
+        default='root', 
+        help="Username for SSH login")
+    parser.add_argument(
+        '-s', 
+        required=True, 
+        help="Server IP address or DNS")
+    parser.add_argument(
+        '-p', 
+        type=int, 
+        default=22, 
+        help="Port for SSH connection (default is 22)")
+    parser.add_argument(
+        '-w', 
+        help="Path to the wordlist for dictionary attack")
+    parser.add_argument(
+        '--min', 
+        type=int, 
+        default=1, 
+        help="Minimum password length for brute force attack")
+    parser.add_argument(
+        '--max', 
+        type=int, 
+        default=4, 
+        help="Maximum password length for brute force attack")
+    parser.add_argument(
+        '-c', 
+        default=string.ascii_letters + string.digits, 
+        help="Charset for brute force attack")
 
     args = parser.parse_args()
 
@@ -181,9 +199,15 @@ def main():
             args.u, 
             args.s, 
             args.w, 
-            args.p
-        )
+            args.p)
     else:
+        if args.min <= 0:
+            logging.error("min_length must be greater than 0")
+            return
+        
+        if args.min > args.max:
+            logging.error("max_length must be greater than min_length")
+            return
         # Brute force attack
         brute_force_password(
             args.u, 
@@ -191,8 +215,7 @@ def main():
             args.min, 
             args.max, 
             args.c, 
-            args.p
-        )
+            args.p)
 
 if __name__ == "__main__":
     main()
