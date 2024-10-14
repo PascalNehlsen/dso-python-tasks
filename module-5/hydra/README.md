@@ -11,9 +11,9 @@ This repository contains the source code for my own implementation of the `hydra
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Usage Examples](#usage-examples)
-  - [Options](#options)
-  - [Dictionary Attack](#dictionary-attack)
   - [Brute-Force Attack](#brute-force-attack)
+  - [Dictionary Attack](#dictionary-attack)
+  - [All Hydra-Options](#all-hydra-Options)
 - [Logging](#logging)
 - [Contact](#contact)
 
@@ -23,8 +23,8 @@ This implementation covers the following features/options:
 
 - **SSH Brute-Force Attack**: Attempts to crack SSH passwords by trying all combinations within a given length and character set.
 - **Dictionary Attack**: Uses a provided wordlist to attempt to find the correct password.
-- **Configurable Parameters**: Allows customization of minimum and maximum password lengths, as well as character sets.
-- **Logging**: Provides detailed logs of all connection attempts and outcomes.
+- **Configurability**: Allows customization of minimum and maximum password lengths, as well as character sets.
+- **Logging**: Provides unstructured detailed logs of all connection attempts and results.
 
 ## Getting Started
 
@@ -33,59 +33,50 @@ To get started with the `hydra` tool, follow these steps:
 1. **Clone the Repository**:
 
 ```shell
-bash
-git clone https://github.com/yourusername/hydra.git
+git clone https://github.com/pascalnehlsen/hydra.git
 cd hydra
 ```
 
-2. **Install Dependencies**:
-   Ensure you have **paramiko** installed. You can install it using pip:
+2. **Create a Virtual Environment**:
 
-```shell
-bash
-pip install paramiko
+```bash
+python -m venv myenv
+```
+
+- Here, myenv is the name of the virtual environment. You can name it anything you like.
+
+3. **Activate the Virtual Environment**:
+
+Using a virtual environment allows you to create isolated Python environments for different projects, ensuring that dependencies and package versions do not conflict with each other.
+
+- For Windows (using Command Prompt or PowerShell):
+
+```bash
+myenv\Scripts\activate
+```
+
+- For macOS/Linux:
+
+```bash
+source myenv/bin/activate
+```
+
+- For Windows (using Git Bash or MINGW64):
+
+```bash
+source myenv/Scripts/activate
+```
+
+Once activated, you should see the name of your virtual environment (e.g., `(myenv)`) in your command prompt, indicating that you are now working inside that environment.
+
+4. **Install Dependencies**:
+   Ensure you have **paramiko** installed. You can install it using the requirements.txt:
+
+```bash
+pip install -r requirements.txt
 ```
 
 ## Usage Examples
-
-### Options
-
-| Option                   | Description                                    | Required |
-| ------------------------ | ---------------------------------------------- | -------- |
-| `-u` <br> `--username`   | Username for SSH login                         | x        |
-| `-s` <br> `--server`     | Server IP address or DNS                       | x        |
-| `-p` <br> `--port`       | Port for SSH connection (default is 22)        |          |
-| `-w` <br> `--wordlist`   | Path to the wordlist for dictionary attack     |          |
-| `-c` <br> `--character`  | Charset for brute force attack                 |          |
-| `--min` <br> `--minimum` | Minimum password length for brute force attack |          |
-| `--max` <br> `--maximum` | Maximum password length for brute force attack |          |
-
-### Dictionary Attack
-
-To perform a dictionary attack using a wordlist, use the following command:
-
-```shell
-python hydra.py \
-    -u <username> \
-    -s <server> \
-    -p <port> \
-    -w <path_to_wordlist>
-```
-
-- username: The SSH username.
-- server: The IP address or DNS name of the SSH server.
-- port: The port for SSH connection (default is 22 if not specified).
-- path_to_wordlist: Path to the wordlist file.
-
-Example:
-
-```shell
-python hydra.py \
-    -u root \
-    -s localhost\
-    -p 2222 \
-    -w ./password.txt
-```
 
 ### Brute-Force Attack
 
@@ -101,13 +92,6 @@ python hydra.py \
     -c <charset>
 ```
 
-- username: The SSH username.
-- server: The IP address or DNS name of the SSH server.
-- port: The port for SSH connection (default is 22 if not specified).
-- min_length: Minimum length of the password.
-- max_length: Maximum length of the password.
-- charset: Characters to use in the password generation (default is alphanumeric).
-
 Example:
 
 ```shell
@@ -120,9 +104,45 @@ python hydra.py \
     -c abc123
 ```
 
+### Dictionary Attack
+
+To perform a dictionary attack using a wordlist, use the following command:
+
+```shell
+python hydra.py \
+    -u <username> \
+    -s <server> \
+    -p <port> \
+    -w <path_to_wordlist>
+```
+
+- path_to_wordlist (`-w`): Path to the wordlist file (required for dictionary attack)
+
+Example:
+
+```shell
+python hydra.py \
+    -u root \
+    -s localhost\
+    -p 2222 \
+    -w ./password.txt
+```
+
+### All Hydra-Options
+
+| Option        | Shorthand | Description                                    | Default value | Required |
+| ------------- | --------- | ---------------------------------------------- | ------------- | -------- |
+| `--username`  | `-u`      | Username for SSH login                         | root          | x        |
+| `--server`    | `-s`      | Server IP address or DNS                       | -             | x        |
+| `--port`      | `-p`      | Port for SSH connection                        | 22            |          |
+| `--wordlist`  | `-w`      | Path to the wordlist for dictionary attack     | -             |          |
+| `--character` | `-c`      | Charset for brute force attack                 | alphanumeric  |          |
+| `--minimum`   | `--min`   | Minimum password length for brute force attack | 1             |          |
+| `--maximum`   | `--max`   | Maximum password length for brute force attack | 4             |          |
+
 ## Logging
 
-Logs are written to **hydra.log**. You can check this file to review detailed information about the connection attempts and outcomes.
+Logs are written to **hydra.log**. The **hydra.log** will be placed in your source code folder. If there is already a **hydra.log** in this folder, the generated log files are appended to the content You can check this file to review detailed information about the connection attempts and outcomes.
 
 ## Contact
 
