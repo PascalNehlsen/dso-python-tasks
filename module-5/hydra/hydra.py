@@ -17,6 +17,10 @@ file_handler.setLevel(logging.INFO)  # Set the level for the file handler
 paramiko_logger = logging.getLogger("paramiko")
 paramiko_logger.setLevel(logging.ERROR)
 
+# Set Paramiko's logger level to ERROR to suppress INFO messages
+paramiko_logger = logging.getLogger("paramiko")
+paramiko_logger.setLevel(logging.ERROR)
+
 # Create a console handler to output logs to the console
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)  # Set the level for the console handler
@@ -70,8 +74,10 @@ def try_login(
         return True
     except paramiko.AuthenticationException:
         logger.info(f"Password '{password}' failed for username '{username}' on server '{server}'")
+        logger.info(f"Password '{password}' failed for username '{username}' on server '{server}'")
         return False
     except Exception as e:
+        logger.error(f"Error trying password '{password}': {e}")
         logger.error(f"Error trying password '{password}': {e}")
         return False
     finally:
@@ -142,6 +148,9 @@ def brute_force_password(
     log_new_attack_attempt()
     logger.info("Brute-force attack started" + "\n")
 
+    password_list = list(password_generator(min_len, max_len, charset))
+
+    for password in password_list:
     password_list = list(password_generator(min_len, max_len, charset))
 
     for password in password_list:
