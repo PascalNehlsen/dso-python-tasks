@@ -60,13 +60,14 @@ def extract_metadata(file_path: str) -> dict:
                 'Keywords': meta.keywords if meta and meta.keywords else 'N/A',
                 'Description': meta.get('/Description', 'N/A') if meta else 'N/A',
                 'Producer': meta.producer if meta and meta.producer else 'N/A',
-                'PDF Version': reader.pdf_version
-            }
+                'PDF Version': reader.pdf_version}
     except Exception as e:
         print(f"Error reading metadata from {file_path}: {e}")
         return {}
 
-def save_metadata_to_csv(metadata_list: list, output_csv: str):
+def save_metadata_to_csv(
+        metadata_list: list, 
+        output_csv: str):
     """
     Saves a list of metadata dictionaries to a CSV file.
     """
@@ -82,8 +83,14 @@ def save_metadata_to_csv(metadata_list: list, output_csv: str):
 def main():
     # Argument parsing
     parser = argparse.ArgumentParser(description="Download PDFs from a webpage and extract metadata")
-    parser.add_argument('-u', '--url', required=True, help="The URL of the webpage to scan for PDFs")
-    parser.add_argument('-n', '--name', required=True, help="The name and path of the output CSV file")
+    parser.add_argument('-u',
+                        '--url', 
+                        required=True, 
+                        help="The URL of the webpage to scan for PDFs")
+    parser.add_argument('-n',
+                        '--name', 
+                        required=True, 
+                        help="The name and path of the output CSV file")
     args = parser.parse_args()
 
     # Create download directory
