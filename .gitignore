@@ -1,14 +1,42 @@
-# macOS Filesystem optimization
-.DS_Store
+# Created by https://www.toptal.com/developers/gitignore/api/python,virtualenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,virtualenv
 
-# python
-.pyc
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments
+.env
 .venv
-venv
-__pycache__
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+module-5/hydra/myenv
 
-# environment variables
-*.env*
-
+# End of https://www.toptal.com/developers/gitignore/api/python,virtualenv
 # exploit
 module-5/2023-32784-exploit/dumps
