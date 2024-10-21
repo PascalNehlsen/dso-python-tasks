@@ -46,11 +46,13 @@ pip install PyPDF2
 
 ### Options
 
-| Option | Description                              | Required |
-| ------ | ---------------------------------------- | -------- |
-| `-d`   | Specify path to a single PDF file        | x        |
-| `-f`   | Specify path to a directory of PDF files | x        |
-| `-n`   | Specify output CSV file name             | x        |
+| Option        | Shorthand | Description                              | Required |
+| ------------- | --------- | ---------------------------------------- | -------- |
+| `--directory` | `-d`      | Specify path to a single PDF file        |          |
+| `--file`      | `-f`      | Specify path to a directory of PDF files |          |
+| `--name`      | `-n`      | Specify output CSV file name             | x        |
+
+- One option is required: `--directory` or `--file`
 
 ### Extract Metadata from a Single File
 

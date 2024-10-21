@@ -59,7 +59,17 @@ def write_to_csv(metadata_list: List[Dict[str, str]], output_file: str) -> None:
         metadata_list (List[Dict[str, str]]): A list of dictionaries containing metadata for each PDF.
         output_file (str): The name of the CSV file to be created.
     """
-    fieldnames = ['Title', 'Author', 'Creator', 'Created', 'Modified', 'Subject', 'Keywords', 'Description', 'Producer', 'PDF Version']
+    fieldnames = [
+        'Title', 
+        'Author', 
+        'Creator', 
+        'Created', 
+        'Modified', 
+        'Subject', 
+        'Keywords', 
+        'Description', 
+        'Producer', 
+        'PDF Version']
     
     with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -105,10 +115,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='Extract metadata from PDF files and save to a CSV file.')
     group = parser.add_mutually_exclusive_group(required=True)
     
-    group.add_argument('-f', '--file', type=str, help='Path to a single PDF file')
-    group.add_argument('-d', '--directory', type=str, help='Path to a directory containing multiple PDF files')
+    group.add_argument(
+        '-f', 
+        '--file', 
+        type=str, 
+        help='Path to a single PDF file')
     
-    parser.add_argument('-n', '--name', type=str, required=True, help='Output CSV file name')
+    group.add_argument(
+        '-d', 
+        '--directory', 
+        type=str, 
+        help='Path to a directory containing multiple PDF files')
+    
+    parser.add_argument(
+        '-n', 
+        '--name', 
+        type=str, 
+        required=True, 
+        help='Output CSV file name')
 
     args = parser.parse_args()
 
